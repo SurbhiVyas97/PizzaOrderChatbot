@@ -7,12 +7,15 @@ use Exception;
 
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
-class BookingConversation extends Conversation
+class OrderConversation extends Conversation
 {
     public function confirmBooking()
-    {try{
-        
+    {
+        try{
         $user = $this->bot->userStorage()->find();
+        /**
+         * save order in DB
+         */
         $order = new Order;
         $orderId=  mt_rand(1000000000, 9999999999);    
         $order->id =  $orderId;
@@ -26,6 +29,8 @@ class BookingConversation extends Conversation
         $order->created_at = now();
         $order->updated_at = now();
         $ordered = $order->save();
+
+        
         if($ordered){
             $message = '------------------------------------------------ <br>';
             $message .= 'Name : '.$user->get('name').'<br>';

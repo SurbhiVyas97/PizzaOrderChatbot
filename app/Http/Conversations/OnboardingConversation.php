@@ -13,6 +13,18 @@ use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 
 class OnboardingConversation extends Conversation
 {
+
+    /**
+     * Start the conversation.
+     *
+     * @return mixed
+     */
+    public function run()
+    {
+       $this->askBuy();
+      
+    }
+
     public function askBuy(){
         $question = Question::create(' Want to Buy Pizza ? ')
         ->callbackId('select_service')
@@ -26,6 +38,9 @@ class OnboardingConversation extends Conversation
                 $this->bot->userStorage()->save([
                     'size' => $answer->getText(),
                 ]);
+                /**
+                 * ask pizza type
+                 */ 
                 $ask =  $this->askPizzaType();
 
                 }elseif(in_array($answer->getText(),['no','No','NO'])){
@@ -66,6 +81,9 @@ class OnboardingConversation extends Conversation
                     $this->bot->userStorage()->save([
                         'type' => $answer->getText(),
                     ]);
+                      /**
+                     * ask pizza type
+                     */ 
                     $this->askPizzaName($question);
                     break;
                 case "Non Veg":
@@ -208,7 +226,7 @@ class OnboardingConversation extends Conversation
 
                           
                             
-                                $this->bot->startConversation(new BookingConversation());
+                                $this->bot->startConversation(new OrderConversation());
                                 $this->say('Thank You 😊');
 
                                 $question = Question::create(' Want to Track Order ? ')
@@ -264,14 +282,5 @@ class OnboardingConversation extends Conversation
         });
     }
 
-    /**
-     * Start the conversation.
-     *
-     * @return mixed
-     */
-    public function run()
-    {
-       $this->askBuy();
-      
-    }
+
 }
